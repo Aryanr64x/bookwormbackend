@@ -52,6 +52,7 @@ def populateTables():
         print(book)
         print("---------------")
         authors = []
+        
         for author_name in book.get('author_name', ['anonymous']):
             # query for the author
             
@@ -63,7 +64,10 @@ def populateTables():
 
         
             authors.append(author)
+        
         db.commit()                
+
+
 
         # query for the book 
         querybook = db.query(Book).filter(Book.slug == slugify(book['title'])).first()

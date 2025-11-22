@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from routes.auth_routes import authRouter
 from routes.list_routes import listRouter
 from routes.book_routes import bookRouter
+from routes.review_routes import reviewRouter
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -31,5 +32,5 @@ app.add_middleware(
 app.include_router(authRouter)
 app.include_router(bookRouter)
 app.include_router(listRouter)
-
+app.include_router(reviewRouter)
 

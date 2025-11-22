@@ -1,5 +1,5 @@
 from database import Base
-from sqlalchemy import Column, String, Integer, Table, ForeignKey
+from sqlalchemy import Column, String, Integer, Table, ForeignKey, Float, UniqueConstraint
 from sqlalchemy.orm import relationship
 
 
@@ -10,6 +10,7 @@ class User(Base):
     password = Column(String , nullable=False)
 
     lists = relationship("List", back_populates = "user")
+    reviews = relationship("Review", back_populates = "user")
 
 
 
@@ -35,7 +36,9 @@ class Book(Base):
     id = Column(Integer, primary_key = True, index = True)
     title = Column(String, nullable = False)
     slug = Column(String, nullable = False, index = True, unique = True)
-   
+    avg_review = Column(Float, nullable = False, default = 0,server_default = "0")
+    review_count = Column(Integer, nullable = False, default = 0,server_default = "0")
+
     authors = relationship(
         "Author",
         secondary = "book_author",
@@ -49,6 +52,9 @@ class Book(Base):
         secondary = "book_list",
         back_populates = "books"
     )
+
+
+    reviews = relationship("Review", back_populates = "book")
 
 
     
@@ -81,5 +87,19 @@ class List(Base):
 
     books = relationship("Book", secondary = "book_list", back_populates = "lists")
 
-# create a list 
-# add book to a list 
+
+
+class Review(Base):
+    __tablename__ = "reviews"
+    id = Column(Integer, primary_key = True, index = True)
+    rating = Column(Integer, nullable= False)
+    review_text = Column(String)
+    user_id  = Column(Integer, ForeignKey("users.id"))
+    book_id = Column(Integer, ForeignKey("books.id"))
+
+    user = relationship('User', back_populates = "reviews")
+    book = relationship('Book', back_populates = "reviews")
+# will throw error if this comobo gets in again
+    # __table_args__ = (
+    #     UniqueConstraint("user_id", "book_id", name="unique_user_book_review"),
+    # )

@@ -37,3 +37,16 @@ class ListResponse(BaseModel):
     name: str
     slug: str
     description: str
+
+
+
+class CreateReview(BaseModel):
+    rating: float
+    review_text: str
+
+
+class ReviewsResponse(BaseModel):
+    id: int
+    review_text: str
+    rating: float
+    user: UserBase    

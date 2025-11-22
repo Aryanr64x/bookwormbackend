@@ -53,3 +53,5 @@ def addBook(request: AddBookToListRequest, db: Session = Depends(get_db), auth_u
 def getBooks(list_id: int,  db: Session = Depends(get_db)):
     fetch_list = db.query(List).options(selectinload(List.books)).filter(List.id == list_id).first()
     return fetch_list
+
+
