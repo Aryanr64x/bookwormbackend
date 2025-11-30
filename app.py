@@ -9,7 +9,7 @@ from routes.review_routes import reviewRouter
 from fastapi.middleware.cors import CORSMiddleware
 
 
-
+# below line of code was commented because of alembic
 # Base.metadata.create_all(bind=engine)
 
 origins = [
