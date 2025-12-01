@@ -1,9 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session, selectinload
 from sqlalchemy import text
 from database import engine
 from models import Book
-from dependecies import get_db
+from dependecies import get_db, rate_limit
 from rapidfuzz import fuzz, process
 import heapq
 
@@ -27,7 +27,8 @@ def getBooks(slug, db: Session = Depends(get_db)):
 
 
 @bookRouter.get('/search/titles')
-def searchBook(q: str,db:Session = Depends(get_db)):
+def searchBook(q: str,request: Request,db:Session = Depends(get_db)):
+    rate_limit(request, limit = 30, window = 60)
     if q.strip() == "":
         raise HTTPException(status_code=402, detail = "Must Provide a query string for this route")
 
